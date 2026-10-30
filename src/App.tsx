@@ -1,26 +1,53 @@
 import { Canvas } from "@react-three/fiber";
-
 import { FormEvent, Suspense, useEffect, useState } from "react";
-
-import AIBrainOrb from "./components/AIBrainOrb";
-
+import EarthBackground from "./components/EarthBackground";
 import TechOrbit from "./components/TechOrbit";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
+  { label: "Home", href: "#home", icon: "home" },
 
-  { label: "About", href: "#about" },
+  { label: "About", href: "#about", icon: "about" },
 
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "#services", icon: "services" },
 
-  { label: "Skills", href: "#skills" },
+  { label: "Skills", href: "#skills", icon: "skills" },
 
-  { label: "Experience", href: "#experience" },
+  { label: "Experience", href: "#experience", icon: "experience" },
 
-  { label: "Projects", href: "#projects" },
+  { label: "Projects", href: "#projects", icon: "projects" },
 
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "#contact", icon: "contact" },
 ];
+
+const NavigationIcon = ({ name }: { name: string }) => {
+  const iconProps = {
+    viewBox: "0 0 24 24",
+    className: "h-5 w-5",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true as const,
+  };
+
+  switch (name) {
+    case "home":
+      return <svg {...iconProps}><path d="m3 10 9-7 9 7" /><path d="M5 9v11h14V9M9 20v-6h6v6" /></svg>;
+    case "about":
+      return <svg {...iconProps}><circle cx="12" cy="8" r="4" /><path d="M5 21a7 7 0 0 1 14 0" /></svg>;
+    case "services":
+      return <svg {...iconProps}><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 16l9 5 9-5" /></svg>;
+    case "skills":
+      return <svg {...iconProps}><path d="m8 5-6 7 6 7M16 5l6 7-6 7M14 3l-4 18" /></svg>;
+    case "experience":
+      return <svg {...iconProps}><rect x="3" y="7" width="18" height="14" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2" /></svg>;
+    case "projects":
+      return <svg {...iconProps}><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M9 10v10" /></svg>;
+    default:
+      return <svg {...iconProps}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></svg>;
+  }
+};
 
 const services = [
   {
@@ -54,6 +81,12 @@ const skills = [
 
   "JavaScript",
 
+  "Svelte",
+
+  "CSS",
+
+  "HTML",
+
   "Node.js",
 
   "Python",
@@ -65,6 +98,8 @@ const skills = [
   "PostgreSQL",
 
   "Supabase",
+
+  "Firebase",
 
   "Serverless",
 
@@ -78,6 +113,29 @@ const skills = [
 
   "Make",
 ];
+
+const skillIcons: Record<string, { src?: string; color: string; mark: string }> = {
+  "AI Automation Engineer": { color: "#7c5cff", mark: "AI" },
+  React: { src: "/icons/react.svg", color: "#61dafb", mark: "R" },
+  TypeScript: { src: "/icons/typescript.svg", color: "#3178c6", mark: "TS" },
+  JavaScript: { src: "/icons/js.svg", color: "#f7df1e", mark: "JS" },
+  Svelte: { src: "/icons/svelte.svg", color: "#ff3e00", mark: "S" },
+  CSS: { src: "/icons/css.svg", color: "#264de4", mark: "CSS" },
+  HTML: { src: "/icons/html.svg", color: "#e34f26", mark: "5" },
+  "Node.js": { src: "/icons/node.svg", color: "#339933", mark: "N" },
+  Python: { color: "#3776ab", mark: "Py" },
+  LangChain: { color: "#14b8a6", mark: "∞" },
+  "OpenAI API": { color: "#10a37f", mark: "AI" },
+  PostgreSQL: { src: "/icons/postgres.svg", color: "#4169e1", mark: "DB" },
+  Supabase: { src: "/icons/supabase.svg", color: "#3ecf8e", mark: "S" },
+  Firebase: { src: "/icons/firebase.svg", color: "#ffca28", mark: "F" },
+  Serverless: { color: "#38bdf8", mark: "λ" },
+  "CI/CD": { color: "#a78bfa", mark: "↻" },
+  Observability: { color: "#22c55e", mark: "◎" },
+  "Claude Code": { color: "#d97757", mark: "C" },
+  Zapier: { color: "#ff4f00", mark: "Z" },
+  Make: { color: "#6d4aff", mark: "M" },
+};
 
 const timeline = [
   {
@@ -156,66 +214,38 @@ const contactCards = [
 ];
 
 const renderExperienceIcon = (type: string) => {
-  if (type === "automation") {
+  const isAutomation = type === "automation";
+
+  if (isAutomation) {
     return (
-      <div
-        style={{
-          display: "flex",
-
-          alignItems: "center",
-
-          justifyContent: "center",
-
-          width: "100%",
-
-          height: "100%",
-        }}
-      >
-        {" "}
-        <Canvas
-          camera={{ position: [0, 0, 6], fov: 45 }}
-          style={{ width: "100%", height: "100%", background: "#001133" }}
-        >
-          {" "}
-          <Suspense fallback={null}>
-            <AIBrainOrb />{" "}
-          </Suspense>{" "}
-        </Canvas>{" "}
-      </div>
+      <img
+        src="/images/robot-ai.png"
+        alt="AI robot with a glowing neural-network brain"
+        className="h-full w-full object-contain"
+        loading="lazy"
+        decoding="async"
+      />
     );
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-
-        alignItems: "center",
-
-        justifyContent: "center",
-
-        width: "100%",
-
-        height: "100%",
-      }}
+    <Canvas
+      camera={{ position: [0, 0, 9.2], fov: 38 }}
+      dpr={[1, 1.5]}
+      gl={{ alpha: true, antialias: true }}
+      style={{ width: "100%", height: "100%", background: "transparent" }}
+      aria-label="Three-dimensional orbit of full-stack technology icons"
     >
-      {" "}
-      <Canvas
-        camera={{ position: [0, 1.5, 6], fov: 50 }}
-        gl={{ alpha: true }}
-        style={{ width: "100%", height: "100%" }}
-      >
-        {" "}
-        <Suspense fallback={null}>
-          <TechOrbit />{" "}
-        </Suspense>{" "}
-      </Canvas>{" "}
-    </div>
+      <Suspense fallback={null}>
+        <TechOrbit />
+      </Suspense>
+    </Canvas>
   );
 };
 
 export default function App() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -232,6 +262,17 @@ export default function App() {
 
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMobileMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isMobileMenuOpen]);
 
   const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -263,12 +304,8 @@ export default function App() {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-(--background) text-left text-(--white)">
       {" "}
-      <div className="pointer-events-none absolute inset-0">
-        {" "}
-        <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-(--accent)/30 blur-3xl" />{" "}
-        <div className="absolute top-32 right-0 h-80 w-80 rounded-full bg-(--accent-2)/25 blur-3xl" />{" "}
-        <div className="absolute bottom-0 left-0 h-96 w-96 rounded-full bg-(--accent-3)/15 blur-3xl" />{" "}
-      </div>{" "}
+      <EarthBackground />
+      <div className="relative z-10">
       <header className="sticky top-0 z-50">
         {" "}
         <div className="glass">
@@ -292,18 +329,17 @@ export default function App() {
             </div>{" "}
             <nav
               aria-label="Main navigation"
-              className="col-span-2 row-start-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-(--text-muted) sm:text-sm lg:col-start-2 lg:col-span-1 lg:row-start-1 lg:gap-x-3 xl:gap-x-4"
+              className="hidden items-center justify-center gap-x-3 text-xs text-(--text-muted) sm:text-sm lg:col-start-2 lg:col-span-1 lg:row-start-1 lg:flex xl:gap-x-4"
             >
-              {" "}
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="transition hover:text-(--white)"
+                  className="whitespace-nowrap transition hover:text-(--white)"
                 >
-                  {link.label}{" "}
+                  {link.label}
                 </a>
-              ))}{" "}
+              ))}
             </nav>{" "}
             <div className="col-start-2 row-start-1 flex items-center justify-self-end gap-2 sm:gap-3 lg:col-start-3">
               {" "}
@@ -312,7 +348,7 @@ export default function App() {
                 onClick={() =>
                   setTheme((prev) => (prev === "dark" ? "light" : "dark"))
                 }
-                className="icon-toggle"
+                className="icon-toggle hidden lg:inline-flex"
                 aria-label="Toggle theme"
               >
                 {" "}
@@ -345,14 +381,79 @@ export default function App() {
                 )}{" "}
               </button>{" "}
               <a
-                className="btn-primary justify-center px-3 py-2 text-center text-xs sm:text-sm"
+                className="btn-primary hidden justify-center px-3 py-2 text-center text-xs sm:inline-flex sm:text-sm"
                 href="#contact"
               >
                 Let’s Talk{" "}
               </a>{" "}
+              <button
+                type="button"
+                className="icon-toggle lg:hidden"
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation"
+                onClick={() => setIsMobileMenuOpen((open) => !open)}
+              >
+                {isMobileMenuOpen ? (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <path d="m6 6 12 12M18 6 6 18" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                  </svg>
+                )}
+              </button>{" "}
             </div>{" "}
           </div>{" "}
         </div>{" "}
+        {isMobileMenuOpen && (
+          <nav
+            id="mobile-navigation"
+            aria-label="Mobile navigation"
+            className="absolute inset-x-4 top-full z-50 mx-auto mt-2 max-w-md rounded-2xl border border-(--hairline) bg-(--surface)/95 p-2 shadow-2xl backdrop-blur-xl lg:hidden"
+          >
+            {navLinks.map((link, index) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-(--text-muted) transition hover:bg-(--accent)/10 hover:text-(--white) focus-visible:bg-(--accent)/10 focus-visible:text-(--white)"
+                style={{ animationDelay: `${index * 35}ms` }}
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-(--hairline) bg-(--surface-strong)/80 text-(--accent-2) transition group-hover:border-(--accent)/40 group-hover:text-(--accent)">
+                  <NavigationIcon name={link.icon} />
+                </span>
+                <span className="flex-1 font-medium">{link.label}</span>
+                <svg viewBox="0 0 24 24" className="h-4 w-4 opacity-50 transition group-hover:translate-x-0.5 group-hover:opacity-100" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </a>
+            ))}
+            <div className="my-2 border-t border-(--hairline)" />
+            <button
+              type="button"
+              onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm text-(--text-muted) transition hover:bg-(--accent)/10 hover:text-(--white) focus-visible:bg-(--accent)/10 focus-visible:text-(--white)"
+              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            >
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-(--hairline) bg-(--surface-strong)/80 text-(--accent-2) transition group-hover:border-(--accent)/40 group-hover:text-(--accent)">
+                {theme === "dark" ? (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 109.8 9.8z" />
+                  </svg>
+                )}
+              </span>
+              <span className="flex-1 font-medium">Switch to {theme === "dark" ? "light" : "dark"} mode</span>
+              <span className="text-xs capitalize text-(--text-muted)">{theme} theme</span>
+            </button>
+          </nav>
+        )}
       </header>{" "}
       <main className="relative">
         {" "}
@@ -416,34 +517,60 @@ export default function App() {
               {" "}
               <div className="space-y-4">
                 <p className="section-label">Current Focus</p>{" "}
-                <h2 className="text-2xl font-semibold">
-                  Building autonomous workflows that scale impact.{" "}
-                </h2>{" "}
-                <p className="text-sm text-(--text-muted)">
-                  I specialize in AI-first automation: agent orchestration,
-                  intelligent routing, and real-time data integrations that keep
-                  products ahead.{" "}
-                </p>{" "}
-                <div className="grid gap-3">
-                  {" "}
-                  {[
-                    "Agentic workflow design",
+                <div className="space-y-4">
+                  <h2 className="text-2xl font-semibold">
+                    Building polished full-stack experiences from interface to data.
+                  </h2>{" "}
+                  <p className="text-sm text-(--text-muted)">
+                    I build responsive web applications with reusable
+                    components, reliable integrations, and thoughtful user
+                    experiences.
+                  </p>{" "}
+                  <div className="grid gap-3">
+                    {[
+                      "Responsive, accessible interfaces",
+                      "Reusable React + TypeScript components",
+                      "API integrations and authentication",
+                      "Database-backed features and real-time dashboards",
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        className="flex items-center gap-3 rounded-xl border border-(--hairline) bg-(--surface-strong)/60 px-4 py-3"
+                      >
+                        <span className="h-2 w-2 shrink-0 rounded-full bg-(--accent)" />
+                        <span className="text-sm">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>{" "}
+                <div className="space-y-4 border-t border-(--hairline) pt-5">
+                  <h2 className="text-2xl font-semibold">
+                    Building autonomous workflows that scale impact.{" "}
+                  </h2>{" "}
+                  <p className="text-sm text-(--text-muted)">
+                    I specialize in AI-first automation: agent orchestration,
+                    intelligent routing, and real-time data integrations that keep
+                    products ahead.{" "}
+                  </p>{" "}
+                  <div className="grid gap-3">
+                    {[
+                      "Agentic workflow design",
 
-                    "Automated reporting pipelines",
+                      "Automated reporting pipelines",
 
-                    "Human-in-the-loop QA systems",
+                      "Human-in-the-loop QA systems",
 
-                    "Realtime alerts + observability",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-3 rounded-xl border border-(--hairline) bg-(--surface-strong)/60 px-4 py-3"
-                    >
-                      {" "}
-                      <span className="h-2 w-2 rounded-full bg-(--accent-2)" />{" "}
-                      <span className="text-sm">{item}</span>{" "}
-                    </div>
-                  ))}{" "}
+                      "Realtime alerts + observability",
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        className="flex items-center gap-3 rounded-xl border border-(--hairline) bg-(--surface-strong)/60 px-4 py-3"
+                      >
+                        <span className="h-2 w-2 rounded-full bg-(--accent-2)" />{" "}
+                        <span className="text-sm">{item}</span>{" "}
+                      </div>
+                    ))}{" "}
+                  </div>{" "}
                 </div>{" "}
                 <div className="rounded-2xl border border-(--hairline) bg-(--surface-strong)/40 p-4">
                   {" "}
@@ -605,15 +732,36 @@ export default function App() {
           </div>{" "}
           <div className="mt-10 flex flex-wrap justify-center gap-3 text-center">
             {" "}
-            {skills.map((skill, index) => (
-              <span
-                key={skill}
-                className="skill-pill rounded-full border border-(--hairline) bg-(--surface-strong)/60 px-4 py-2 text-sm"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                {skill}{" "}
-              </span>
-            ))}{" "}
+            {skills.map((skill, index) => {
+              const icon = skillIcons[skill];
+
+              return (
+                <span
+                  key={skill}
+                  className="skill-pill inline-flex items-center gap-2 rounded-full border border-(--hairline) bg-(--surface-strong)/60 px-4 py-2 text-sm"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  {icon.src ? (
+                    <img
+                      src={icon.src}
+                      alt=""
+                      aria-hidden="true"
+                      className="h-6 w-6 rounded-md object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden="true"
+                      className="grid h-6 w-6 place-items-center rounded-md text-[0.65rem] font-bold"
+                      style={{ backgroundColor: `${icon.color}22`, color: icon.color }}
+                    >
+                      {icon.mark}
+                    </span>
+                  )}
+                  <span>{skill}</span>
+                </span>
+              );
+            })}{" "}
           </div>{" "}
         </section>{" "}
         <section
@@ -639,9 +787,9 @@ export default function App() {
             {timeline.map((item, index) => (
               <div key={item.role} className="card-grad p-6 text-center">
                 {" "}
-                <div className="flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
+                <div className="flex flex-col items-center gap-6 text-center lg:flex-row lg:justify-between lg:text-left">
                   {" "}
-                  <div className="space-y-3">
+                  <div className="min-w-0 space-y-3 lg:flex-1">
                     {" "}
                     <div>
                       {" "}
@@ -660,17 +808,12 @@ export default function App() {
                     </p>{" "}
                   </div>{" "}
                   <div
-                    className="experience-illustration shrink-0"
+                    className="experience-illustration flex-none"
                     style={{
                       background: `linear-gradient(140deg, ${item.accent}33, ${item.accentTwo}22)`,
                     }}
                   >
                     {" "}
-                    <div className="absolute inset-0 opacity-30">
-                      {" "}
-                      <div className="absolute -top-6 left-4 h-16 w-16 rounded-full bg-white/10 blur-xl" />{" "}
-                      <div className="absolute bottom-0 right-2 h-20 w-20 rounded-full bg-white/10 blur-xl" />{" "}
-                    </div>{" "}
                     <div className="relative z-10 flex h-full w-full items-center justify-center">
                       {renderExperienceIcon(item.icon)}{" "}
                     </div>{" "}
@@ -910,8 +1053,12 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-(--text-muted) sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Bryan Onyebuagu. All rights reserved.</p>
           <p>Crafted with AI automation and premium UX.</p>
+          <p className="text-xs sm:max-w-xs sm:text-right">
+            Earth imagery: NASA Blue Marble. Cloud layer: Contains modified EUMETSAT data.
+          </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

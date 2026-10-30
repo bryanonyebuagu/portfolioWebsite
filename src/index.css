@@ -3,7 +3,7 @@
 :root {
   color-scheme: dark;
   --background: #05060b;
-  --surface: #0b1020;
+  --surface: rgba(11, 16, 32, 0.82);
   --surface-strong: #141c2f;
   --surface-glass: rgba(11, 16, 32, 0.65);
   --accent: #7c5cff;
@@ -19,7 +19,7 @@
 html.light {
   color-scheme: light;
   --background: #f8fafc;
-  --surface: #ffffff;
+  --surface: rgba(255, 255, 255, 0.84);
   --surface-strong: #e2e8f0;
   --surface-glass: rgba(255, 255, 255, 0.7);
   --accent: #7c3aed;
@@ -47,6 +47,46 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   
+}
+
+.earth-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.64;
+  transition: opacity 500ms ease;
+}
+
+html.light .earth-backdrop {
+  opacity: 0.34;
+}
+
+.earth-static-fallback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(88vw, 82vh, 64rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #07152b;
+  background-image: url("/textures/earth/blue-marble.jpg");
+  background-position: center;
+  background-size: cover;
+  box-shadow: inset -2.2rem -0.8rem 3.5rem #02040a;
+}
+
+@media (max-width: 640px) {
+  .earth-backdrop {
+    opacity: 0.46;
+  }
+
+  html.light .earth-backdrop {
+    opacity: 0.22;
+  }
+
 }
 
 h1,
@@ -206,26 +246,14 @@ html.light .badge {
   position: relative;
   display: grid;
   place-items: center;
-  width: clamp(200px, 32vw, 260px);
-  height: clamp(200px, 32vw, 260px);
+  width: min(100%, 24rem);
+  height: auto;
+  aspect-ratio: 1;
   border-radius: 28px;
   background: rgba(124, 92, 255, 0.15);
   border: 1px solid var(--hairline);
   overflow: hidden;
   animation: float-slow 8s ease-in-out infinite;
-}
-
-.experience-illustration::after {
-  content: "";
-  position: absolute;
-  inset: -40% 20% 40% -20%;
-  background: radial-gradient(circle, rgba(124, 92, 255, 0.5), transparent 70%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.experience-illustration:hover::after {
-  opacity: 1;
 }
 
 .robot-brain path.neural-path {

@@ -1,4 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <rect width="120" height="120" rx="24" fill="#f7df1e"/>
-  <text x="34" y="78" font-size="44" font-family="Arial" font-weight="700" fill="#1f1f1f">JS</text>
+  <path fill="#f7df1e" d="M24 12h72a12 12 0 0 1 12 12v72a12 12 0 0 1-12 12H24a12 12 0 0 1-12-12V24a12 12 0 0 1 12-12z"/>
 </svg>
